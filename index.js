@@ -22,7 +22,10 @@ server.use(express.json());
 server.use(helmet())
 
 const Router = require('./data/Router.js')
+const ProjectRouter = require('./data/ProjectRouter.js')
+
 server.use('/api/lambda', Router);
+server.use('/api/lambda/project', ProjectRouter)
 
 server.get('/', (req, res) => {
     res.send(`<h2> Welcome To The Legendary Sprint Challenge </h2>`)

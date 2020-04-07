@@ -1,54 +1,43 @@
 const express = require('express')
 const router = express.Router()
-const Info = require('./helpers/actionModel')
+const Project = require('./helpers/projectModel')
 
 router.use(express.json())
 
-//Create/Insert
+//create 
 
 router.post(`/`, (req, res) => {
     const body = req.body
 
-
-    Info.insert(body)
+    Project.insert(body)
     .then(info => {
         res.status(201).json({success: true, info})
     })
-    .catch(error => {
-        res.status(500).json({success: false, error})
-    })
+    .catch(error => res.status(500).json({success: false, error}))
 })
 
+//create
 
-
-
-//Read/Get
-
-router.get(`/`, (req, res) => {
-    Info.get().then(info => {
+router.get('/', (req, res) => {
+    Project.get().then(info => {
         if(info) {
             res.status(200).json({success: true, info})
         } else {
-            res.status(500).json({success: false, message:'user info not found'})
+            res.status(404).json({success: false, message: 'Info not Found!!!'})
         }
     })
-    .catch(error => {
-        console.log(error)
-        res.status(500).json({success: false, error})
-    })
+    .catch(error => res.status(500).json({success: false, error}))
+ })
 
-})
+ //edit
 
+ router.put('/:id', (req, res) => {
 
-//Put/Edit/Update
-
-router.put(`/:id`, (req, res) => {
-    const info = req.body;
+    const body = req.body;
     const {id} = req.params;
 
-    Info.update(id, info)
-    .then(edited => {
-        if (edited) {
+    Project.update(id, body).then(edit => {
+        if (edit) {
             res.status(201).json({success: true, edited})
         } else {
             res.status(404).json({success: false, message: 'id not found'})
@@ -57,18 +46,17 @@ router.put(`/:id`, (req, res) => {
     .catch(error => {
         res.status(500).json({success: false, error})
     })
-})
+ })
 
-
-//Delete/Remove
+ //delete
 
 router.delete(`/:id`, (req, res) => {
     const {id} = req.params;
 
-    Info.remove(id)
-    .then(deleted => {
-        if (deleted) {
-        res.status(204).json();
+    Project.remove(id)
+    .then(erase => {
+        if (erase) {
+        res.status(204).json({success: true, message: 'id erased'});
         } else {
             res.status(404).json({success: false, message: 'id not found'})
         }
@@ -81,7 +69,7 @@ router.delete(`/:id`, (req, res) => {
 
 router.get(`/:id`, (req, res) => {
     const {id} = req.params;
-    Info.get(id)
+    Project.getProjectActions(id)
     .then(info => {
         if (info) {
             res.status(200).json({success: true, message: 'OK', info})
