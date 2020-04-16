@@ -12,3 +12,24 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Go code!
 */
+
+const express = require('express');
+const helmet = require('helmet')
+
+const server = express();
+
+server.use(express.json());
+server.use(helmet())
+
+const Router = require('./data/Router.js')
+const ProjectRouter = require('./data/ProjectRouter.js')
+
+server.use('/api/lambda', Router);
+server.use('/api/lambda/project', ProjectRouter)
+
+server.get('/', (req, res) => {
+    res.send(`<h2> Welcome To The Legendary Sprint Challenge </h2>`)
+})
+
+
+module.exports = server;
